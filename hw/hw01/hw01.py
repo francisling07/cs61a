@@ -129,6 +129,7 @@ def hailstone(x):
     7
     """
     "*** YOUR CODE HERE ***"
+    # add a comment 2022-12-02 test
     res = []
     res.append(x)
     print(x)
