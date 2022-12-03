@@ -142,6 +142,12 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return tree(size(m))
+    else:
+        l, r = end(left(m)), end(right(m))
+        return tree(total_weight(m), [totals_tree(l), totals_tree(r)])
+
 
 
 def replace_leaf(t, find_value, replace_value):
@@ -174,6 +180,10 @@ def replace_leaf(t, find_value, replace_value):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return tree(replace_value) if label(t) == find_value else tree(label(t))
+    else:
+        return tree(label(t), [replace_leaf(b, find_value, replace_value) for b in branches(t)])
 
 
 def preorder(t):
