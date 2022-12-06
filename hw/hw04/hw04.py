@@ -288,7 +288,7 @@ def div_interval(x, y):
     any value in y. Division is implemented as the multiplication of x by the
     reciprocal of y."""
     "*** YOUR CODE HERE ***"
-    assert lower_bound(y) * upper_bound(y) > 0
+    assert lower_bound(y) * upper_bound(y) > 0, 'The 2nd interval is either >0 or <0'
     reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
