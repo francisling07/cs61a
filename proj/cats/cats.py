@@ -17,6 +17,12 @@ def choose(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    if len(paragraphs) !=0:
+        choosed_para = [para for para in paragraphs if select(para)]
+        if k < len(choosed_para):
+            return choosed_para[k]
+        return ''
+    return ''
     # END PROBLEM 1
 
 
@@ -33,6 +39,13 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def select(to_select_list):
+        # to_select_list is the target paragraph
+        for word in topic:
+            if word in lower(to_select_list):
+                return True
+        return False           
+    return select
     # END PROBLEM 2
 
 
@@ -57,6 +70,16 @@ def accuracy(typed, reference):
     reference_words = split(reference)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    pencentage = 0
+    correct = 0
+    incorrect = 0
+    if typed == '':
+        return 0.0
+    for word in typed_words:
+        if word in reference_words:
+            correct += 1
+    percentage = 100*correct / len(typed_words)
+    return round(percentage, 1)
     # END PROBLEM 3
 
 
