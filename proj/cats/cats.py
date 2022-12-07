@@ -72,14 +72,14 @@ def accuracy(typed, reference):
     "*** YOUR CODE HERE ***"
     pencentage = 0
     correct = 0
-    incorrect = 0
     if typed == '':
         return 0.0
-    for word in typed_words:
-        if word in reference_words:
+    length = min(len(typed_words), len(reference_words))
+    for i in range(length):
+        if typed_words[i] == reference_words[i]:
             correct += 1
     percentage = 100*correct / len(typed_words)
-    return round(percentage, 1)
+    return round(percentage, 2)
     # END PROBLEM 3
 
 
@@ -88,6 +88,9 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    length = len(typed)
+    wpm_s = (length/5)*60/elapsed  # 5 characters a word, elapsed is counted with seconds
+    return round(wpm_s, 2)
     # END PROBLEM 4
 
 
@@ -98,6 +101,14 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if user_word in valid_words:
+        return user_word
+    words_diff = [diff_function(user_word, word, limit) for word in valid_words]   # build the diff list
+    similar_word, similar_diff = min(zip(valid_words, words_diff), key=lambda item: item[1])  # note the zip func usage
+    if similar_diff < limit:
+        return similar_word
+    else:
+        return user_word
     # END PROBLEM 5
 
 
@@ -107,7 +118,15 @@ def shifty_shifts(start, goal, limit):
     their lengths.
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
+    if limit <0:
+        return 0
+    if len(start) == 0 or len(goal)==0 :
+        return len(start) + len(goal)
+    if start[0] == goal[0]:
+        return shifty_shifts(start[1:], goal[1:], limit)
+    else:
+        return shifty_shifts(start[1:], goal[1:], limit-1) + 1
     # END PROBLEM 6
 
 
