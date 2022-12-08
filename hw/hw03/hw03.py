@@ -182,7 +182,7 @@ def move_stack(n, start, end):
        print_move(start, end)
        return
     mid = 6 - start - end
-    move_stack(n-1, start, mid)
+    move_stack(n-1, start, mid)    # recursive steps n th step composed of  2 n-1 steps
     print_move(start, end)
     move_stack(n-1, mid, end)
 
