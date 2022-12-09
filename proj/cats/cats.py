@@ -132,7 +132,7 @@ def shifty_shifts(start, goal, limit):
 
 def meowstake_matches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    #assert False, 'Remove this line'
+    # assert False, 'Remove this line'
 
     if limit < 0: # Fill in the condition
         # BEGIN
@@ -150,9 +150,9 @@ def meowstake_matches(start, goal, limit):
         return meowstake_matches(start[1:], goal[1:], limit)
 
     else:
-        add_diff = meowstake_matches(start, goal[1:], limit -1)  # Fill in these lines. !!! TODO:
-        remove_diff = meowstake_matches(start[1:], goal, limit - 1)
-        substitute_diff = meowstake_matches(start[1:], goal[1:], limit -1)
+        add_diff = meowstake_matches(start, goal[1:], limit -1)  # Fill in these lines. !!! Recursive methold
+        remove_diff = meowstake_matches(start[1:], goal, limit - 1)  # remove start 1st letter
+        substitute_diff = meowstake_matches(start[1:], goal[1:], limit -1)  # replace start 1st letter with goal's. These expressions state the afterwards condition.
         # BEGIN
         "*** YOUR CODE HERE ***"
         return 1 + min(min(add_diff, remove_diff), substitute_diff)
@@ -173,6 +173,14 @@ def report_progress(typed, prompt, id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    correct_typed = 0
+    for i in range(len(typed)):
+        if typed[i] == prompt[i]:
+            correct_typed += 1
+        else: break
+    progress = correct_typed / len(prompt)
+    send({'id':id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -199,6 +207,14 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    times = []
+    for i in range(len(times_per_player)):
+        time_player = []
+        for j in range(len(times_per_player[0]) - 1):
+            time_player.append(times_per_player[i][j+1] - times_per_player[i][j]) 
+        times.append(time_player)
+    game = [words, times]
+    return game
     # END PROBLEM 9
 
 
@@ -214,6 +230,19 @@ def fastest_words(game):
     words = range(len(all_words(game)))    # An index for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    words_appended =[]
+    fastest = []
+    for player in players:
+        player_words =[]
+        for word in words:
+            if all_times(game)[player][word] == min([all_times(game)[player][word] for player in players]):
+                if all_words(game)[word] not in words_appended:
+                    player_words.append(all_words(game)[word])
+                    words_appended.append(all_words(game)[word])
+        fastest.append(player_words)
+    return fastest
+
+
     # END PROBLEM 10
 
 
