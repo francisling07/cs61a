@@ -241,8 +241,6 @@ def fastest_words(game):
                     words_appended.append(all_words(game)[word])
         fastest.append(player_words)
     return fastest
-
-
     # END PROBLEM 10
 
 
@@ -288,7 +286,7 @@ enable_multiplayer = False  # Change to True when you
 # Extra Credit #
 ##########################
 
-key_distance = get_key_distances()
+key_distance = get_key_distances()  # get a key distance mapping dict
 def key_distance_diff(start, goal, limit):
     """ A diff function that takes into account the distances between keys when
     computing the difference score."""
@@ -298,6 +296,19 @@ def key_distance_diff(start, goal, limit):
 
     # BEGIN PROBLEM EC1
     "*** YOUR CODE HERE ***"
+    if limit < 0 :
+        return float('inf')
+    elif len(start) == 0 or len(goal) == 0:
+        return len(start) + len(goal)
+    if start[0] == goal[0]:
+        return key_distance_diff(start[1:], goal[1:], limit)  # The 1st letter are the same, recursive call function
+    else:
+        add_diff = 1 + key_distance_diff(start, goal[1:], limit -1)
+        remove_diff = 1 + key_distance_diff(start[1:],goal, limit -1)   # remove the 1st letter and then compare the rest
+        k_distance = key_distance[(start[0],goal[0])]
+        sub_diff = k_distance + key_distance_diff(start[1:], goal[1:], limit-1)
+        return min(min(add_diff, remove_diff), sub_diff)
+
     # END PROBLEM EC1
 
 def memo(f):
@@ -311,13 +322,33 @@ def memo(f):
     return memoized
 
 key_distance_diff = count(key_distance_diff)
+key_distance_diff = memo(key_distance_diff)
+
 
 
 def faster_autocorrect(user_word, valid_words, diff_function, limit):
     """A memoized version of the autocorrect function implemented above."""
 
-    # BEGIN PROBLEM EC2
+    # BEGIN PROBLEM EC2  # Can I use the memo(f) function?
     "*** YOUR CODE HERE ***"
+    # diff_function = memo(diff_function)
+    memo_for_fa = {}
+    idx = tuple([user_word, tuple(valid_words), diff_function, limit])
+
+    if user_word in valid_words:
+        return user_word
+    if idx in memo_for_fa:
+        return memo_for_fa[idx]
+
+    words_diff = [diff_function(user_word, word, limit) for word in valid_words]   # build the diff list
+    similar_word, similar_diff = min(zip(valid_words, words_diff), key=lambda item: item[1])  # note the zip func usage
+
+    if similar_diff < limit:
+        ret = similar_word
+    else:
+        ret = user_word
+    memo_for_fa[idx] = similar_word
+    return ret
     # END PROBLEM EC2
 
 
