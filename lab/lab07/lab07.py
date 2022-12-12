@@ -205,13 +205,26 @@ def make_advanced_counter_maker():
     >>> tom_counter('global-count')
     1
     """
-    ________________
-    def ____________(__________):
-        ________________
-        def ____________(__________):
-            ________________
+    global_count = 0
+    def make_counter():
+        local_count = 0
+        def counter_helper(count_type):
+            nonlocal global_count, local_count
             "*** YOUR CODE HERE ***"
-            # as many lines as you want
-        ________________
-    ________________
+            if count_type == 'global-count':
+                global_count += 1
+                return global_count
+            elif count_type == 'count':
+                local_count += 1
+                return local_count
+            elif count_type == 'global-reset':
+                global_count = 0
+            elif count_type == 'reset':
+                local_count = 0
+            else:
+                raise TypeError("invalid instruction")
 
+
+            # as many lines as you want
+        return counter_helper
+    return make_counter
