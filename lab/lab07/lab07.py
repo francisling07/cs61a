@@ -7,7 +7,8 @@ def insert_into_all(item, nested_list):
     >>> insert_into_all(0, nl)
     [[0], [0, 1, 2], [0, 3]]
     """
-    return ______________________________
+    return [[item] + lst for lst in nested_list]
+    
 
 def subseqs(s):
     """Assuming that S is a list, return a nested list of all subsequences
@@ -19,11 +20,11 @@ def subseqs(s):
     >>> subseqs([])
     [[]]
     """
-    if ________________:
-        ________________
+    if not s:
+        return [[]]
     else:
-        ________________
-        ________________
+        all_but_first_sub = subseqs(s[1:])
+        return all_but_first_sub + insert_into_all(s[0], all_but_first_sub)
 
 
 def inc_subseqs(s):
@@ -42,14 +43,14 @@ def inc_subseqs(s):
     """
     def subseq_helper(s, prev):
         if not s:
-            return ____________________
+            return [[]]
         elif s[0] < prev:
-            return ____________________
+            return subseq_helper(s[1:], prev)
         else:
-            a = ______________________
-            b = ______________________
-            return insert_into_all(________, ______________) + ________________
-    return subseq_helper(____, ____)
+            a = subseq_helper(s[1:], s[0])
+            b = subseq_helper(s[1:], prev )
+            return insert_into_all(s[0], a) + b
+    return subseq_helper(s, 0)
 
 
 def trade(first, second):
@@ -81,9 +82,9 @@ def trade(first, second):
     """
     m, n = 1, 1
 
-    equal_prefix = lambda: ______________________
-    while _______________________________:
-        if __________________:
+    equal_prefix = lambda: sum(first[:m]) == sum(second[:n])
+    while sum(first[:m]) != sum(second[:n]) and m < len(first) and n < len(second):
+        if sum(first[:m]) < sum(second[:n]):
             m += 1
         else:
             n += 1
@@ -108,6 +109,7 @@ def reverse(lst):
     [-8, 72, 42]
     """
     "*** YOUR CODE HERE ***"
+    lst[:] = lst[::-1]
 
 
 cs61a = {
@@ -135,6 +137,18 @@ def make_glookup(class_assignments):
     0.8913043478260869
     """
     "*** YOUR CODE HERE ***"
+    total_point = 0 
+    total_class = []
+    def student_lookup(class_item, point):
+        nonlocal total_point
+        nonlocal total_class
+        total_class.append(class_item)
+        total_point += point
+        class_points = 0
+        for item in total_class:
+            class_points += class_assignments[item]
+        return total_point / class_points
+    return student_lookup
 
 
 def num_trees(n):
